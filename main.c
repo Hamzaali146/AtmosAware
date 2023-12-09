@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include <curl/curl.h>
-
+#include "C:\curl-8.5.0_1-win64-mingw\include\curl/curl.h"
 int main(void) {
     CURL *curl;
     CURLcode response;
