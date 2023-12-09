@@ -3,24 +3,23 @@
 
 int main(void) {
     CURL *curl;
-    CURLcode res;
+    CURLcode response;
 
-    curl_global_init(CURL_GLOBAL_DEFAULT);
+    curl_global_init(CURL_GLOBAL_ALL);
+
     curl = curl_easy_init();
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "API_ENDPOINT_URL");
+        curl_easy_setopt(curl, CURLOPT_URL, "http://calapi.inadiutorium.cz/api/v0/en/calendars/general-en/2021/03");
 
-        // Additional options such as headers, parameters, etc. can be set here
+        response = curl_easy_perform(curl);
 
-        res = curl_easy_perform(curl);
-
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-
+        if(response != CURLE_OK) {
+            fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
+        } else {
+            printf(response);
+        }
         curl_easy_cleanup(curl);
     }
-
     curl_global_cleanup();
-
     return 0;
 }
