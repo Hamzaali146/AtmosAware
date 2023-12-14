@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "C:\curl-8.5.0_1-win64-mingw\include\curl/curl.h"
+#include "curl/curl.h"
 int main(void) {
     CURL *curl;
     CURLcode response;
@@ -15,7 +15,7 @@ int main(void) {
         if(response != CURLE_OK) {
             fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
         } else {
-            printf(response);
+            printf("response successfully Loaded :) %d\n",response);
         }
         curl_easy_cleanup(curl);
     }
