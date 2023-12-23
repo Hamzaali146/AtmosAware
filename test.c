@@ -65,56 +65,39 @@
 //     return 0;
 // }
 #include <stdio.h>
-#include <stdlib.h>
 #include <curl/curl.h>
 
-// Callback function to write data to a file
-size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
-    return fwrite(ptr, size, nmemb, stream);
+size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    FILE *file = (FILE *)userp;
+    return fwrite(contents, size, nmemb, file);
 }
 
-int main(void) {
+int main() {
     CURL *curl;
     CURLcode res;
-    FILE *file;
 
-    // URL of the API endpoint
-    const char *url = "https://api.example.com/data";
-
-    // Output file path
-    const char *outputFilePath = "output.json";
-
-    // Initialize libcurl
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
 
     if(curl) {
-        // Set the URL to fetch data from
-        curl_easy_setopt(curl, CURLOPT_URL, url);
+        FILE *file = fopen("weather_data.json", "wb");  // Open file in binary write mode
 
-        // Set the callback function to write data to a file
-        file = fopen(outputFilePath, "wb");
-        if (file == NULL) {
-            fprintf(stderr, "Failed to open output file\n");
-            return 1;
+        if(file) {
+            curl_easy_setopt(curl, CURLOPT_URL, "your_weather_api_url_here");
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+
+            res = curl_easy_perform(curl);
+
+            fclose(file);  // Close the file after writing
+
+            if(res != CURLE_OK)
+                fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
         }
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
 
-        // Perform the request
-        res = curl_easy_perform(curl);
-
-        // Check for errors
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-
-        // Cleanup
-        fclose(file);
         curl_easy_cleanup(curl);
     }
 
-    // Cleanup libcurl
     curl_global_cleanup();
-
     return 0;
 }
