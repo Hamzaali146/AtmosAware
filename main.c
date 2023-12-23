@@ -1,24 +1,37 @@
 #include <stdio.h>
-#include "curl/curl.h"
-int main(void) {
+#include <curl/curl.h>
+
+size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    FILE *file = (FILE *)userp;
+    return fwrite(contents, size, nmemb, file);
+}
+
+int main() {
     CURL *curl;
     CURLcode response;
 
-    curl_global_init(CURL_GLOBAL_ALL);
-
+    curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
+
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,relative_humidity_2m,rain,wind_speed_10m,temperature_80m,temperature_120m,temperature_180m");
+        FILE *file = fopen("weather_data.json", "wb");  // Open file in binary write mode
 
-        response = curl_easy_perform(curl);
+        if(file) {
+            curl_easy_setopt(curl, CURLOPT_URL, "your_weather_api_url_here");
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
 
-        if(response != CURLE_OK) {
-            fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
-        } else {
-            printf("response successfully Loaded :) %d\n",response);
+            response = curl_easy_perform(curl);
+
+            fclose(file);  // Close the file after writing
+
+            if(response != CURLE_OK)
+                fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(response));
         }
+
         curl_easy_cleanup(curl);
     }
+
     curl_global_cleanup();
     return 0;
 }
