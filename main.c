@@ -17,7 +17,7 @@ int main() {
         FILE *file = fopen("weather_data.json", "wb");  // Open file in binary write mode
 
         if(file) {
-            curl_easy_setopt(curl, CURLOPT_URL, "your_weather_api_url_here");
+            curl_easy_setopt(curl, CURLOPT_URL, "https://api.open-meteo.com/v1/forecast?latitude=24.8608&longitude=67.0104&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,pressure_msl");
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
 
