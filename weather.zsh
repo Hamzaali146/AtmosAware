@@ -1,13 +1,14 @@
 #!/bin/bash
-json_file="weather_data.json"
+file="weather_data.json"
 
 # Extract and display values
-latitude=$(jq -r '.location.coordinates.latitude' "$json_file")
-longitude=$(jq -r '.location.coordinates.longitude' "$json_file")
-temperature=$(jq -r '.weather.temperature' "$json_file")
-humidity=$(jq -r '.weather.humidity' "$json_file")
+latitude=$(jq -r '.latitude' "$file")
+longitude=$(jq -r '.longitude' "$file")
+temperature=$(jq -r '.current.temperature_2m' "$file")
+humidity=$(jq -r '.current.humidity' "$file")
 
 # Display values to the user
+echo "The Weather of karachi is:"
 echo "Latitude: $latitude"
 echo "Longitude: $longitude"
 echo "Temperature: $temperature"
