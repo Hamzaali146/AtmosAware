@@ -1,0 +1,18 @@
+STATISTICS:
+Number of readings: 2
+Mean Temperature: 17.50
+Mean Humidity: 82.00
+Max Temperature: 17.50
+Min Temperature: 17.50
+Max Humidity: 82.00
+Min Humidity: 82.00
+-------------------------------------------
+STATISTICS:
+Number of readings: 2
+Mean Temperature: 17.00
+Mean Humidity: 84.00
+Max Temperature: 17.00
+Min Temperature: 17.00
+Max Humidity: 84.00
+Min Humidity: 84.00
+-------------------------------------------

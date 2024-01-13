@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <curl/curl.h>
 
 size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
@@ -28,7 +29,8 @@ int main() {
             if(response != CURLE_OK)
                 fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(response));
         }
-
+	system("./weather.zsh");
+	//system("./emailalert.zsh");
         curl_easy_cleanup(curl);
     }
 
