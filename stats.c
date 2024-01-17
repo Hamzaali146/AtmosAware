@@ -5,12 +5,6 @@
 #include <math.h>
 
 int main(int argc, char *argv[]) {
-    // Check if the correct number of arguments is provided
-    if (argc != 3) {
-        fprintf(stderr, "Usage: %s <temperature_file> <humidity_file>\n", argv[0]);
-        return 1;
-    }
-
     // Open the temperature file
     FILE *temp_file = fopen(argv[1], "r");
     if (temp_file == NULL) {
